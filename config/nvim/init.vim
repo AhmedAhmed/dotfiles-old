@@ -73,6 +73,7 @@ call plug#begin('~/.config/nvim/plugged')
     set so=7 " set 7 lines to the cursors - when moving vertical
     set wildmenu " enhanced command line completion
     set hidden " current buffer can be put into background
+    set background=dark " set background to dark
     set showcmd " show incomplete commands
     set noshowmode " don't show which mode disabled for PowerLine
     set wildmode=list:longest " complete files like a shell
@@ -98,6 +99,14 @@ call plug#begin('~/.config/nvim/plugged')
     set foldnestmax=10 " deepest fold is 10 levels
     set nofoldenable " don't fold by default
     set foldlevel=1
+
+    "  Move line up
+    nnoremap <A-j> :m .+1<CR>==
+    nnoremap <A-k> :m .-2<CR>==
+    inoremap <A-j> <Esc>:m .+1<CR>==gi
+    inoremap <A-k> <Esc>:m .-2<CR>==gi
+    vnoremap <A-j> :m '>+1<CR>gv=gv
+    vnoremap <A-k> :m '<-2<CR>gv=gv
 
     " toggle invisible characters
     set list
@@ -129,12 +138,14 @@ call plug#begin('~/.config/nvim/plugged')
     " Load colorschemes
     Plug 'chriskempson/base16-vim'
     Plug 'joshdick/onedark.vim'
+    Plug 'dracula/vim'
+    Plug 'morhetz/gruvbox'
 
     " LightLine {{{
         Plug 'itchyny/lightline.vim'
         Plug 'nicknisi/vim-base16-lightline'
         let g:lightline = {
-            \   'colorscheme': 'base16',
+            \   'colorscheme': 'dracula',
             \   'active': {
             \       'left': [ [ 'mode', 'paste' ],
             \               [ 'gitbranch' ],
@@ -171,8 +182,8 @@ call plug#begin('~/.config/nvim/plugged')
             \       'active': [ 'filetype', 'filename', 'modified' ],
             \       'inactive': [ 'filetype', 'filename', 'modified' ],
             \   },
-            \   'separator': { 'left': '', 'right': '' },
-            \   'subseparator': { 'left': '', 'right': '' }
+            \   'separator': {'left': '', 'right': ''},
+            \   'subseparator': {'left': '', 'right': ''},
         \ }
     " }}}
 " }}}
@@ -184,8 +195,17 @@ call plug#begin('~/.config/nvim/plugged')
     " remap esc
     inoremap jk <esc>
 
+    " Access init.vim
+    nnoremap <leader>v :e ~/.config/nvim/init.vim<CR>
+
+    " Source nvim
+    nnoremap <leader>s :source ~/.config/nvim/init.vim<CR>
+
     " shortcut to save
     nmap <leader>, :w<cr>
+
+    " remove background
+    nmap <leader>hi :hi normal guibg=000000<CR>
 
     " set paste toggle
     set pastetoggle=<leader>v
@@ -231,6 +251,9 @@ call plug#begin('~/.config/nvim/plugged')
     nmap <leader>z <Plug>Zoom
 
     map <leader>wc :wincmd q<cr>
+
+    noremap <C-p> :FZF<cr>
+    noremap <C-s> :w<cr>
 
     " move line mappings
     " ∆ is <A-j> on macOS
@@ -346,6 +369,20 @@ call plug#begin('~/.config/nvim/plugged')
     " detect indent style (tabs vs. spaces)
     Plug 'tpope/vim-sleuth'
 
+    " NERDTree
+    Plug 'preservim/nerdtree'
+
+    " CoPilot
+    Plug 'github/copilot.vim'
+
+    Plug 'elixir-editors/vim-elixir'
+
+    " Enables Buffer tabs
+    Plug 'ap/vim-buftabline'
+
+    " Enables Multiple language syntax
+    Plug 'sheerun/vim-polyglot'
+
     " Startify: Fancy startup screen for vim {{{
         Plug 'mhinz/vim-startify'
 
@@ -391,6 +428,16 @@ call plug#begin('~/.config/nvim/plugged')
         autocmd! User GoyoEnter nested call helpers#goyo#enter()
         autocmd! User GoyoLeave nested call helpers#goyo#leave()
     " }}}
+	
+    " Buffer tabs
+    "
+    set hidden
+    nnoremap <Tab> :bnext<CR>
+    nnoremap <S-Tab> :bprev<CR>
+
+    " NERDTree
+    "
+    nnoremap <leader>ne :NERDTreeToggle<CR>
 
     " context-aware pasting
     Plug 'sickill/vim-pasta'
@@ -617,7 +664,7 @@ call plug#begin('~/.config/nvim/plugged')
         Plug 'digitaltoad/vim-pug', { 'for': ['jade', 'pug'] }
 
         " nunjucks support
-        Plug 'niftylettuce/vim-jinja'
+        Plug 'lepture/vim-jinja'
 
         " liquid support
         Plug 'tpope/vim-liquid'
@@ -675,9 +722,9 @@ call plug#end()
         let base16colorspace=256
         source ~/.vimrc_background
     else
-        let g:onedark_termcolors=16
-        let g:onedark_terminal_italics=1
-        colorscheme onedark
+        let g:dracula_termcolors=16
+        let g:dracula_terminal_italics=1
+        colorscheme dracula
     endif
     syntax on
     filetype plugin indent on
