@@ -383,6 +383,8 @@ call plug#begin('~/.config/nvim/plugged')
     " Enables Multiple language syntax
     Plug 'sheerun/vim-polyglot'
 
+    Plug 'fatih/vim-go'
+
     " Startify: Fancy startup screen for vim {{{
         Plug 'mhinz/vim-startify'
 
